@@ -1,0 +1,48 @@
+{
+  "name": "Foi & Cœur - Rencontres Chrétiennes",
+  "short_name": "Foi & Cœur",
+  "description": "Plateforme de rencontres chrétiennes pour le mariage sérieux",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#fd297b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "social"],
+  "shortcuts": [
+    {
+      "name": "Découvrir",
+      "short_name": "Découvrir",
+      "description": "Découvrir de nouveaux profils",
+      "url": "/discover",
+      "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "Profil",
+      "short_name": "Profil",
+      "description": "Voir et modifier mon profil",
+      "url": "/profile",
+      "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "Messages",
+      "short_name": "Messages",
+      "description": "Voir mes conversations",
+      "url": "/messages",
+      "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]
+    }
+  ]
+}
