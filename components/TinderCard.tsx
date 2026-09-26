@@ -195,7 +195,7 @@ export default function TinderCard({
         <div className="tinder-card-info">
           <div className="tinder-card-header">
             <h2 className="tinder-card-name">
-              {user.firstName}, {user.age || calculateAge(user.birthDate)}
+              {user.firstName}, {user.age || (user.birthDate && calculateAge(user.birthDate))}
             </h2>
             <div className="tinder-compatibility-badge">
               {compatibilityScore}%

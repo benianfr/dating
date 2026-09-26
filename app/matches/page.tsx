@@ -44,14 +44,8 @@ export default function MatchesPage() {
         }
         
         // Get or create conversation
-        const conversation = await messageService.getConversation(userId, otherUserId)
-        if (conversation) {
-          conversationsData[otherUserId] = conversation.id
-        } else {
-          // Create conversation if it doesn't exist
-          const conversationId = await messageService.createConversation(userId, otherUserId)
-          conversationsData[otherUserId] = conversationId
-        }
+        const conversation = await messageService.createConversation(userId, otherUserId)
+        conversationsData[otherUserId] = conversation.id
       }
       setUsers(usersData)
       setConversations(conversationsData)

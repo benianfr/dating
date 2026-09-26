@@ -93,25 +93,29 @@ export const compatibilityService = {
     let score = 0
 
     if (user1PrefValid) {
-      if (user2Age >= user1.prefAgeMin && user2Age <= user1.prefAgeMax) {
+      const minAge = user1.prefAgeMin || 18
+      const maxAge = user1.prefAgeMax || 100
+      if (user2Age >= minAge && user2Age <= maxAge) {
         score += 50
       } else {
         // Partial points if close to preferences
         const distance = Math.min(
-          Math.abs(user2Age - user1.prefAgeMin),
-          Math.abs(user2Age - user1.prefAgeMax)
+          Math.abs(user2Age - minAge),
+          Math.abs(user2Age - maxAge)
         )
         score += Math.max(0, 50 - distance * 5)
       }
     }
 
     if (user2PrefValid) {
-      if (user1Age >= user2.prefAgeMin && user1Age <= user2.prefAgeMax) {
+      const minAge = user2.prefAgeMin || 18
+      const maxAge = user2.prefAgeMax || 100
+      if (user1Age >= minAge && user1Age <= maxAge) {
         score += 50
       } else {
         const distance = Math.min(
-          Math.abs(user1Age - user2.prefAgeMin),
-          Math.abs(user1Age - user2.prefAgeMax)
+          Math.abs(user1Age - minAge),
+          Math.abs(user1Age - maxAge)
         )
         score += Math.max(0, 50 - distance * 5)
       }

@@ -220,7 +220,10 @@ export default function OnboardingPage() {
         prefAgeMin: userData.prefAgeMin?.toString() || '',
         prefAgeMax: userData.prefAgeMax?.toString() || '',
         prefObjective: userData.prefObjective || 'serious',
-        prefFaithImportance: userData.prefFaithImportance || 'important'
+        prefFaithImportance: userData.prefFaithImportance || 'important',
+        latitude: userData.latitude,
+        longitude: userData.longitude,
+        locationEnabled: userData.locationEnabled || false
       })
     } catch (error) {
       console.error('Error loading user:', error)

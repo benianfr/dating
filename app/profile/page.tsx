@@ -83,7 +83,7 @@ export default function ProfilePage() {
       setAdditionalPhotos(prev => [...prev, ...photoUrls])
       
       // Update user data in Firestore
-      const updatedPhotos = [user.mainPhoto, ...additionalPhotos, ...photoUrls].filter(Boolean)
+      const updatedPhotos = [user.mainPhoto, ...additionalPhotos, ...photoUrls].filter((photo): photo is string => Boolean(photo)) as string[]
       await userService.updateUser(user.id, { photos: updatedPhotos })
       // Note: Photo changes don't affect compatibility, so no need to recalculate matches
       
@@ -132,7 +132,7 @@ export default function ProfilePage() {
       setAdditionalPhotos(newAdditionalPhotos)
       
       // Update user data in Firestore
-      const updatedPhotos = [user.mainPhoto, ...newAdditionalPhotos].filter(Boolean)
+      const updatedPhotos = [user.mainPhoto, ...newAdditionalPhotos].filter((photo): photo is string => Boolean(photo)) as string[]
       console.log('Updated photos array:', updatedPhotos)
       await userService.updateUser(user.id, { photos: updatedPhotos })
       
@@ -177,7 +177,7 @@ export default function ProfilePage() {
       const hasCompatibilityChange = Object.keys(data).some(key => compatibilityFields.includes(key))
       
       if (hasCompatibilityChange) {
-        await matchRecalculator.recalculateAllMatchesForUser(user.id)
+        await matchRecalculator.recalculateUserMatches(user.id)
       }
       
       await loadUserProfile()
@@ -362,7 +362,7 @@ export default function ProfilePage() {
                   <div className="photos-grid">
                     <div className="main-photo-item main-photo">
                       {user.mainPhoto ? (
-                        <img src={user.mainPhoto} alt="Photo principale" onClick={() => handleViewPhoto(user.mainPhoto)} />
+                        <img src={user.mainPhoto} alt="Photo principale" onClick={() => user.mainPhoto && handleViewPhoto(user.mainPhoto)} />
                       ) : (
                         <div className="photo-placeholder-small">
                           <span className="photo-initials-small">{user.firstName?.[0]}{user.lastName?.[0]}</span>
@@ -786,7 +786,7 @@ function EditPersonalInfoModal({ user, onClose, onSave, saving }: any) {
     e.preventDefault()
     onSave('personal', {
       ...formData,
-      languages: formData.languages.split(',').map(l => l.trim()).filter(Boolean)
+      languages: formData.languages.split(',').map((l: string) => l.trim()).filter((l: string) => Boolean(l))
     })
   }
 

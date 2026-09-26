@@ -117,12 +117,7 @@ function MessagesContent() {
         return
       }
 
-      let conversation = await messageService.getConversation(userId, targetUserId)
-      
-      if (!conversation) {
-        const conversationId = await messageService.createConversation(userId, targetUserId)
-        conversation = await messageService.getConversation(userId, targetUserId)
-      }
+      const conversation = await messageService.createConversation(userId, targetUserId)
 
       if (conversation) {
         setSelectedConversation(conversation.id)
@@ -135,13 +130,13 @@ function MessagesContent() {
 
   const loadMessages = async (conversationId: string) => {
     try {
-      const convMessages = await messageService.getConversationMessages(conversationId)
+      const convMessages = await messageService.getMessages(conversationId)
       setMessages(convMessages)
 
       // Mark messages as read
       const userId = localStorage.getItem('userId')
       if (userId) {
-        await messageService.markMessagesAsRead(conversationId, userId)
+        await messageService.markAsRead(conversationId, userId)
       }
     } catch (error) {
       console.error('Error loading messages:', error)

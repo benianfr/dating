@@ -20,6 +20,9 @@ import {
 import { db } from './firebase'
 import { User, Match, Like, Message, Conversation, Report, Block, Boost, SuperLikeRemaining, Subscription } from '@/types'
 
+// Re-export subscription service from separate file
+export { subscriptionService } from './firestore/subscriptions'
+
 // User Service
 export const userService = {
   async getUserById(userId: string): Promise<User | null> {
@@ -737,103 +740,3 @@ export const boostService = {
 }
 
 // Subscription Service
-export const subscriptionService = {
-  async createSubscription(userId: string, plan: 'free' | 'gold' | 'platinum'): Promise<Subscription> {
-    try {
-      const subscriptionRef = doc(collection(db, 'subscriptions'))
-      const subscription = {
-        userId,
-        plan,
-        startDate: serverTimestamp(),
-        isActive: true,
-        autoRenew: false
-      }
-      
-      await setDoc(subscriptionRef, subscription)
-      
-      return {
-        id: subscriptionRef.id,
-        ...subscription,
-        startDate: new Date()
-      } as Subscription
-    } catch (error) {
-      console.error('Error creating subscription:', error)
-      throw error
-    }
-  },
-
-  async getUserPlan(userId: string): Promise<'free' | 'gold' | 'platinum'> {
-    try {
-      const subscriptionQuery = query(
-        collection(db, 'subscriptions'),
-        where('userId', '==', userId),
-        where('isActive', '==', true)
-      )
-      
-      const snapshot = await getDocs(subscriptionQuery)
-      
-      if (snapshot.empty) {
-        return 'free'
-      }
-      
-      const subscription = snapshot.docs[0].data()
-      return subscription.plan || 'free'
-    } catch (error) {
-      console.error('Error getting user plan:', error)
-      return 'free'
-    }
-  },
-
-  async getPremiumFeatures(userId: string): Promise<{
-    unlimitedLikes: boolean
-    unlimitedSuperLikes: boolean
-    unlimitedRewinds: boolean
-    seeWhoLikedYou: boolean
-    dailySuperLikes: number
-    dailyRewinds: number
-  }> {
-    try {
-      const plan = await this.getUserPlan(userId)
-      
-      switch (plan) {
-        case 'platinum':
-          return {
-            unlimitedLikes: true,
-            unlimitedSuperLikes: true,
-            unlimitedRewinds: true,
-            seeWhoLikedYou: true,
-            dailySuperLikes: 5,
-            dailyRewinds: 999
-          }
-        case 'gold':
-          return {
-            unlimitedLikes: true,
-            unlimitedSuperLikes: true,
-            unlimitedRewinds: false,
-            seeWhoLikedYou: true,
-            dailySuperLikes: 3,
-            dailyRewinds: 10
-          }
-        default:
-          return {
-            unlimitedLikes: false,
-            unlimitedSuperLikes: false,
-            unlimitedRewinds: false,
-            seeWhoLikedYou: false,
-            dailySuperLikes: 1,
-            dailyRewinds: 3
-          }
-      }
-    } catch (error) {
-      console.error('Error getting premium features:', error)
-      return {
-        unlimitedLikes: false,
-        unlimitedSuperLikes: false,
-        unlimitedRewinds: false,
-        seeWhoLikedYou: false,
-        dailySuperLikes: 1,
-        dailyRewinds: 3
-      }
-    }
-  }
-}

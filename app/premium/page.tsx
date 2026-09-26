@@ -6,6 +6,7 @@ import AppHeader from '../../components/AppHeader'
 import RequireCompleteProfile from '../../components/RequireCompleteProfile'
 import { subscriptionService } from '@/lib/firestore'
 import { userService } from '@/lib/firestore'
+import { Subscription } from '@/types'
 
 export default function PremiumPage() {
   const router = useRouter()

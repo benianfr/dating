@@ -44,8 +44,7 @@ export const authService = {
     
     console.log('Creating user document in Firestore...')
     // Create user document in Firestore
-    await userService.createUser(userCredential.user.uid, {
-      id: userCredential.user.uid,
+    const newUser = await userService.createUser({
       email: userCredential.user.email!,
       firstName,
       lastName,
@@ -54,7 +53,7 @@ export const authService = {
     })
     
     // Save userId to localStorage
-    localStorage.setItem('userId', userCredential.user.uid)
+    localStorage.setItem('userId', newUser.id)
     
     console.log('Email sign up successful')
     return userCredential.user
@@ -128,8 +127,7 @@ export const authService = {
       const firstName = nameParts[0] || ''
       const lastName = nameParts.slice(1).join(' ') || ''
       
-      await userService.createUser(user.uid, {
-        id: user.uid,
+      const newUser = await userService.createUser({
         email: user.email!,
         firstName,
         lastName,
@@ -137,6 +135,9 @@ export const authService = {
         updatedAt: new Date()
       })
       console.log('User document created')
+      
+      // Save userId to localStorage
+      localStorage.setItem('userId', newUser.id)
     } else {
       console.log('User document already exists')
       
